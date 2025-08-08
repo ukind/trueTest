@@ -1,11 +1,7 @@
-import Button from '@mui/material/Button';
+import MovieSeeker from './features/MovieSeeker';
 
 function App() {
-  return (
-    <div>
-      <Button variant="contained">Hello Material UI</Button>
-    </div>
-  );
+  return <MovieSeeker></MovieSeeker>;
 }
 
 export default App;
