@@ -23,8 +23,8 @@ export default class SearchService {
     return response.data;
   }
 
-  static async getMoviesDetail(Payload: Search.getMovies.Payload) {
-    const response = await axiosClient.get<Search.getMovies.Response>(
+  static async getMoviesDetail(Payload: Search.getMovieDetail.Payload) {
+    const response = await axiosClient.get<Search.getMovieDetail.Response>(
       CatalogueEndpoint.getMovieDetail,
       {
         params: Payload,
