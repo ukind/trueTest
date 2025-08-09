@@ -1,19 +1,21 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-
+import { useSearchParams } from 'react-router-dom';
 import { useFindSuggestion } from '../../../queries/searchQueries';
+import type { Search } from '../../../services/Search/types';
 import type { searchSchemaType } from './schema';
 import searchSchema from './schema';
 import type { SuggestionState } from './types';
 
 const useSearchBar = () => {
+  const [_, setSearchParams] = useSearchParams();
+
   const [suggestionState, setSuggestionState] = useState<SuggestionState>({
     suggestions: [],
-    isSuggestionOpen: false,
   });
 
-  const { control, setValue, getFieldState } = useForm<searchSchemaType>({
+  const { control, formState, handleSubmit } = useForm<searchSchemaType>({
     defaultValues: {
       searchTitle: '',
       selectedTitle: '',
@@ -30,36 +32,50 @@ const useSearchBar = () => {
 
   const { data } = useFindSuggestion({
     page: 1,
-    s: searchTitle,
+    s: searchTitle.trim(),
     type,
   });
 
-  const onSelectDropdown = (value?: string) => {
-    setSuggestionState((prev) => ({ ...prev, isSuggestionOpen: false }));
-    setValue('selectedTitle', value);
+  const addParamsToUrl = (selectedTitle?: string) => {
+    setSearchParams({ q: selectedTitle ?? '' });
+  };
+
+  const onSelectDropdown = (
+    value: string | Search.getMovies.SearchEntity | null
+  ) => {
+    const title = typeof value === 'string' ? value : value?.Title;
+
+    addParamsToUrl(title);
+  };
+
+  const onSearch = (value: string) => {
+    addParamsToUrl(value);
   };
 
   useEffect(() => {
     if (data?.Search?.length) {
       setSuggestionState({
         suggestions: data?.Search,
-        isSuggestionOpen: true,
       });
     }
   }, [data]);
 
   useEffect(() => {
     if (!searchTitle) {
-      setSuggestionState({ suggestions: [], isSuggestionOpen: false });
+      setSuggestionState({ suggestions: [] });
     }
   }, [searchTitle]);
 
+  const { suggestions } = suggestionState;
+
   return {
     control,
-    suggestions: suggestionState.suggestions,
+    formState,
+    suggestions,
     onSelectDropdown,
-    isSuggestionOpen: suggestionState.isSuggestionOpen,
+    onSearch,
     searchTitle,
+    handleSubmit,
   };
 };
 
