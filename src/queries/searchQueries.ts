@@ -18,3 +18,29 @@ export const useFindSuggestion = (
     enabled: !!payload.s,
   });
 };
+
+export const useGetMovieList = (payload: Search.getMovies.Payload) => {
+  return useQuery({
+    queryKey: ['search', 'movies', JSON.stringify(payload)],
+    queryFn: async ({ signal }) => {
+      await sleep(500);
+      if (!signal?.aborted) {
+        return SearchService.searchMovies(payload);
+      }
+    },
+    enabled: !!payload.s,
+  });
+};
+
+export const useGetMovieDetail = (payload: Search.getMovieDetail.Payload) => {
+  return useQuery({
+    queryKey: ['movie', 'detail', JSON.stringify(payload)],
+    queryFn: async ({ signal }) => {
+      await sleep(500);
+      if (!signal?.aborted) {
+        return SearchService.getMoviesDetail(payload);
+      }
+    },
+    enabled: !!payload.i,
+  });
+};
