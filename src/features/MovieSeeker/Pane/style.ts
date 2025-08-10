@@ -1,9 +1,7 @@
 import { styled } from '@mui/material';
 
 export const Container = styled('div')`
-  position: fixed;
-  top: 0;
-  left: 0;
+  position: relative;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
