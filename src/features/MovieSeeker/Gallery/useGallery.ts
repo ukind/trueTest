@@ -20,7 +20,7 @@ const useGallery = ({
   const moviesContainer = useRef<HTMLDivElement>(null);
 
   const isAtBottom = (el: HTMLDivElement | null) => {
-    const scrollbarPosition = el?.getBoundingClientRect().bottom || 0;
+    const scrollbarPosition = el?.getBoundingClientRect()?.bottom || 0;
 
     const windowHigh = window.innerHeight;
     return scrollbarPosition - 10 <= windowHigh;
