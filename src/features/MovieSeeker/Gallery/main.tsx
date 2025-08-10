@@ -32,14 +32,14 @@ const Gallery = () => {
   const { isOpen } = modalState;
 
   return (
-    <>
+    <div data-testid="pane">
       <Pane
         isLoading={movieDetailIsLoading}
         isOpen={isOpen}
         onClose={onClose}
         movieDetail={movieDetail}
       ></Pane>
-      {isLoading && <MovieLoader></MovieLoader>}
+      {isLoading && <MovieLoader data-testid="movie-loader"></MovieLoader>}
       <MoviesContainer ref={moviesContainer}>
         <MoviesWrapper>
           <MoviesList>
@@ -71,7 +71,7 @@ const Gallery = () => {
           </MoviesList>
         </MoviesWrapper>
       </MoviesContainer>
-    </>
+    </div>
   );
 };
 
